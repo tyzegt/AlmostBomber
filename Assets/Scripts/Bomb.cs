@@ -16,7 +16,7 @@ public class Bomb : MonoBehaviour
     private float Counter;
 
     public LayerMask StoneLayer;
-    public LayerMask BrickLayer;
+    public LayerMask BlowableLayer;
 
     public List<Vector2> CellsToBlowR;
     public List<Vector2> CellsToBlowL;
@@ -49,7 +49,14 @@ public class Bomb : MonoBehaviour
         }
     }
 
-
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Fire")
+        {
+            Blow();
+            Destroy(gameObject);
+        }
+    }
 
     void Blow()
     {
@@ -100,7 +107,7 @@ public class Bomb : MonoBehaviour
             {
                 break;
             }
-            if (Physics2D.OverlapCircle(new Vector2(transform.position.x - i, transform.position.y), 0.1f, BrickLayer))
+            if (Physics2D.OverlapCircle(new Vector2(transform.position.x - i, transform.position.y), 0.1f, BlowableLayer))
             {
                 CellsToBlowL.Add(new Vector2(transform.position.x - i, transform.position.y));
                 break;
@@ -114,7 +121,7 @@ public class Bomb : MonoBehaviour
             {
                 break;
             }
-            if (Physics2D.OverlapCircle(new Vector2(transform.position.x + i, transform.position.y), 0.1f, BrickLayer))
+            if (Physics2D.OverlapCircle(new Vector2(transform.position.x + i, transform.position.y), 0.1f, BlowableLayer))
             {
                 CellsToBlowR.Add(new Vector2(transform.position.x + i, transform.position.y));
                 break;
@@ -128,7 +135,7 @@ public class Bomb : MonoBehaviour
             {
                 break;
             }
-            if (Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y + i), 0.1f, BrickLayer))
+            if (Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y + i), 0.1f, BlowableLayer))
             {
                 CellsToBlowU.Add(new Vector2(transform.position.x, transform.position.y + i));
                 break;
@@ -142,7 +149,7 @@ public class Bomb : MonoBehaviour
             {
                 break;
             }
-            if (Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - i), 0.1f, BrickLayer))
+            if (Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - i), 0.1f, BlowableLayer))
             {
                 CellsToBlowD.Add(new Vector2(transform.position.x, transform.position.y - i));
                 break;

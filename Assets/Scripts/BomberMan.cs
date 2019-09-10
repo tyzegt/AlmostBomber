@@ -14,6 +14,7 @@ public class BomberMan : MonoBehaviour
 
     private bool CanMove;
     private bool InsideBomb;
+    private bool InsideFire;
 
     private int BombsAllowed;
     private int FireLength;
@@ -29,6 +30,7 @@ public class BomberMan : MonoBehaviour
     public LayerMask StoneLayer;
     public LayerMask BombLayer;
     public LayerMask BrickLayer;
+    public LayerMask FireLayer;
 
     public GameObject Bomb;
     
@@ -55,7 +57,7 @@ public class BomberMan : MonoBehaviour
 
     private void HandleBombs()
     {
-        if(ButtonBomb && GameObject.FindGameObjectsWithTag("Bomb").Length < BombsAllowed)
+        if(ButtonBomb && GameObject.FindGameObjectsWithTag("Bomb").Length < BombsAllowed && !InsideBomb && !InsideFire)
         {
             Instantiate(Bomb, new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y)), transform.rotation);
         }
@@ -86,6 +88,7 @@ public class BomberMan : MonoBehaviour
     {
         Sensor.transform.localPosition = new Vector2(0, 0);
         InsideBomb = Physics2D.OverlapBox(Sensor.position, new Vector2(SensorSize, SensorSize), 0, BombLayer);
+        InsideFire = Physics2D.OverlapBox(Sensor.position, new Vector2(SensorSize, SensorSize), 0, FireLayer);
         switch (Direction)
         {            
             case 2:
