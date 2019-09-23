@@ -24,12 +24,18 @@ public class Bomb : MonoBehaviour
     public List<Vector2> CellsToBlowD;
 
     private bool calculated;
+    private bool canTick;
 
     private int FireLength;
+
+    private BomberMan bomberman;
 
     // Start is called before the first frame update
     void Start()
     {
+        bomberman = FindObjectOfType<BomberMan>();
+        if (!bomberman.CheckDetonator()) canTick = true;
+        else canTick = false;
         calculated = false;
         Counter = Delay;
         CellsToBlowR = new List<Vector2>();
@@ -41,11 +47,13 @@ public class Bomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Counter > 0) Counter -= Time.deltaTime;
+        if (Counter > 0)
+        {
+            if(canTick)Counter -= Time.deltaTime;
+        } 
         else
         {
-            Blow();
-            Destroy(gameObject);
+            Blow();            
         }
     }
 
@@ -54,11 +62,10 @@ public class Bomb : MonoBehaviour
         if (other.gameObject.tag == "Fire")
         {
             Blow();
-            Destroy(gameObject);
         }
     }
 
-    void Blow()
+    public void Blow()
     {
         
         CalculateFireDirections();
@@ -91,15 +98,16 @@ public class Bomb : MonoBehaviour
                 if (i == CellsToBlowD.Count - 1) Instantiate(FireBottom, CellsToBlowD[i], transform.rotation);
                 else Instantiate(FireVertical, CellsToBlowD[i], transform.rotation);
             }
-        
 
-        
+        Destroy(gameObject);
+
+
     }
 
     void CalculateFireDirections()
     {
         if (calculated) return;
-        FireLength = FindObjectOfType<BomberMan>().GetFireLength();
+        FireLength = bomberman.GetFireLength();
         // L
         for (int i = 1; i <= FireLength; i++)
         {
