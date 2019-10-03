@@ -5,7 +5,8 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     public List<Vector2> PathToTarget;
-    List<Node> CheckedNodes = new List<Node>();
+    public List<Node> CheckedNodes = new List<Node>();
+    public List<Node> FreeNodes = new List<Node>();
     List<Node> WaitingNodes = new List<Node>();
     public GameObject Target;
     public LayerMask SolidLayer;
@@ -14,7 +15,7 @@ public class PathFinder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PathToTarget = GetPath(Target.transform.position);
+        //PathToTarget = GetPath(Target.transform.position);
     }
 
     public List<Vector2> GetPath(Vector2 target)
@@ -24,7 +25,7 @@ public class PathFinder : MonoBehaviour
         WaitingNodes = new List<Node>();
 
         Vector2 StartPosition = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
-        Vector2 TargetPosition = new Vector2(Mathf.Round(Target.transform.position.x), Mathf.Round(Target.transform.position.y));
+        Vector2 TargetPosition = new Vector2(Mathf.Round(target.x), Mathf.Round(target.y));
         
         if(StartPosition == TargetPosition) return PathToTarget;
 
@@ -55,7 +56,7 @@ public class PathFinder : MonoBehaviour
                 } 
             }
         }
-
+        FreeNodes = CheckedNodes;
 
         return PathToTarget;
     }
